@@ -1,0 +1,10 @@
+[package]
+name = "path_as_uri"
+version = "0.1.0"
+edition = "2024"
+description = "Convert a path to a URI"
+
+
+[dependencies]
+anyhow = "1.0.98"
+url = "2.5.4"
