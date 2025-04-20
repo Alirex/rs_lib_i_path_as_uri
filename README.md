@@ -1,8 +1,14 @@
 # Path as URI
 
+---
+
+[![pre-commit](https://github.com/Alirex/rs_lib_i_path_as_uri/actions/workflows/pre-commit.yaml/badge.svg)](https://github.com/Alirex/rs_lib_i_path_as_uri/actions/workflows/pre-commit.yaml)
+
 Allows you to get the path of a file as a URI. That can be clicked in the terminal.
 
 ## Example
+
+---
 
 ```rust
 use path_as_uri::get_path_as_uri_string;
