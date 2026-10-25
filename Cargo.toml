@@ -15,7 +15,7 @@ keywords = ["path", "uri", "url", "file-uri"]
 categories = ["filesystem"]
 
 [dependencies]
-anyhow = "1.0"
+thiserror = "2"
 url = "2.5"
 
 [lints.rust]

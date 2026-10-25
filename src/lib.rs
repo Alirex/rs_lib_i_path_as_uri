@@ -9,7 +9,7 @@
 //! ```rust
 //! # #[cfg(unix)]
 //! # {
-//! use std::path::Path;
+//! use std::path::{Path, PathBuf};
 //!
 //! let uri = path_as_uri::get_path_as_uri_string(Path::new("/path/to/file with spaces.txt"));
 //! assert_eq!(uri, "file:///path/to/file%20with%20spaces.txt");
@@ -22,12 +22,27 @@
 //! - [`get_path_as_uri_string_or_error`]: a [`String`] or an error.
 //! - [`get_path_as_uri_string`]: a [`String`], panics on a relative path.
 
-use anyhow::{Error, Result};
-use std::path::Path;
+use std::path::{Path, PathBuf};
+use thiserror::Error;
 use url::Url;
 
 /// A path that must be absolute (a relative path has no URI).
 pub type PathThatMustBeAbsolute = Path;
+
+/// Errors that can occur when converting a path to a `file://` URI.
+#[derive(Debug, Error)]
+#[non_exhaustive]
+pub enum PathAsUriError {
+    /// The path is not absolute, or cannot be represented as a `file://` URI on this platform.
+    ///
+    /// `Url::from_file_path` rejects relative paths and, on Windows, paths longer than
+    /// 260 characters or containing null bytes.
+    #[error("Path is not absolute or cannot be represented as a URI: '{}'", path.display())]
+    NotAbsolute {
+        /// The path that could not be converted.
+        path: PathBuf,
+    },
+}
 
 /// A URI as a string, for example `file:///path/to/file.txt`.
 pub type PathAsUriAsString = String;
@@ -39,14 +54,15 @@ pub type PathAsUriAsString = String;
 ///
 /// # Errors
 ///
-/// Returns an error if the path is not absolute (or cannot be represented as a URI on this platform).
+/// Returns [`PathAsUriError::NotAbsolute`] if the path is not absolute or cannot be
+/// represented as a `file://` URI on this platform.
 ///
 /// # Examples
 ///
 /// ```rust
 /// # #[cfg(unix)]
 /// # {
-/// use std::path::Path;
+/// use std::path::{Path, PathBuf};
 /// use path_as_uri::get_path_as_uri_or_error;
 ///
 /// let uri = get_path_as_uri_or_error(Path::new("/path/to/file.txt")).unwrap();
@@ -55,12 +71,11 @@ pub type PathAsUriAsString = String;
 /// assert!(get_path_as_uri_or_error(Path::new("relative/file.txt")).is_err());
 /// # }
 /// ```
-pub fn get_path_as_uri_or_error(path: &PathThatMustBeAbsolute) -> Result<Url> {
-    Url::from_file_path(path).map_err(|()| {
-        Error::msg(format!(
-            "Failed to convert path to URI. Maybe it is not absolute. Path: '{}'.",
-            path.display()
-        ))
+pub fn get_path_as_uri_or_error(
+    path: &PathThatMustBeAbsolute,
+) -> std::result::Result<Url, PathAsUriError> {
+    Url::from_file_path(path).map_err(|()| PathAsUriError::NotAbsolute {
+        path: path.to_path_buf(),
     })
 }
 
@@ -71,21 +86,24 @@ pub fn get_path_as_uri_or_error(path: &PathThatMustBeAbsolute) -> Result<Url> {
 ///
 /// # Errors
 ///
-/// Returns the same error as [`get_path_as_uri_or_error`].
+/// Returns [`PathAsUriError::NotAbsolute`] if the path is not absolute or cannot be
+/// represented as a `file://` URI on this platform. See [`get_path_as_uri_or_error`] for details.
 ///
 /// # Examples
 ///
 /// ```rust
 /// # #[cfg(unix)]
 /// # {
-/// use std::path::Path;
+/// use std::path::{Path, PathBuf};
 /// use path_as_uri::get_path_as_uri_string_or_error;
 ///
 /// let uri = get_path_as_uri_string_or_error(Path::new("/path/to/file.txt")).unwrap();
 /// assert_eq!(uri, "file:///path/to/file.txt");
 /// # }
 /// ```
-pub fn get_path_as_uri_string_or_error(path: &PathThatMustBeAbsolute) -> Result<PathAsUriAsString> {
+pub fn get_path_as_uri_string_or_error(
+    path: &PathThatMustBeAbsolute,
+) -> std::result::Result<PathAsUriAsString, PathAsUriError> {
     // Just convert the Url to a string, if it is valid. Return the same error if it is not.
     get_path_as_uri_or_error(path).map(String::from)
 }
@@ -104,7 +122,7 @@ pub fn get_path_as_uri_string_or_error(path: &PathThatMustBeAbsolute) -> Result<
 /// ```rust
 /// # #[cfg(unix)]
 /// # {
-/// use std::path::Path;
+/// use std::path::{Path, PathBuf};
 /// use path_as_uri::get_path_as_uri_string;
 ///
 /// assert_eq!(get_path_as_uri_string(Path::new("/path/to/file.txt")), "file:///path/to/file.txt");
