@@ -35,12 +35,16 @@ fn test_get_path_as_uri_as_string() {
 #[test]
 fn test_get_path_as_uri_invalid() {
     let result = get_path_as_uri_or_error(Path::new(RELATIVE));
-    assert!(result.is_err());
+    assert!(matches!(result, Err(PathAsUriError::NotAbsolute { .. })));
 }
 
 #[test]
 fn test_error_message_contains_the_path() {
     let error = get_path_as_uri_or_error(Path::new(RELATIVE)).unwrap_err();
+    assert!(
+        matches!(&error, PathAsUriError::NotAbsolute { path } if path == Path::new(RELATIVE)),
+        "{error:?}"
+    );
     assert!(error.to_string().contains(RELATIVE), "{error}");
 }
 

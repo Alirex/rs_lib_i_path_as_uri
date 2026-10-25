@@ -6,6 +6,12 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Changed
+
+- **Breaking:** public functions now return `PathAsUriError` (a thiserror enum) instead of
+  `anyhow::Error`, so callers can match on the failure without depending on `anyhow`. Its one variant,
+  `NotAbsolute`, carries the path (`PathBuf`); the enum is `#[non_exhaustive]`.
+
 ## [0.1.1] - 2026-10-25
 
 ### Changed
