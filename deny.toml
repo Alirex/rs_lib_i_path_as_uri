@@ -1,0 +1,22 @@
+# cargo-deny: advisories, licenses, bans, sources. Run by `just q-deny` and in CI (it fetches the advisory database).
+
+[advisories]
+version = 2
+
+[licenses]
+version = 2
+allow = [
+    "MIT",
+    "Apache-2.0",
+    "Unicode-3.0",
+    "ISC",
+]
+
+[bans]
+multiple-versions = "warn"
+wildcards = "deny"
+
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]
