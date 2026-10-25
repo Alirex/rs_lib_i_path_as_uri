@@ -1,25 +1,39 @@
 [package]
 name = "path_as_uri"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
-#rust-version = "1.86.0"
+rust-version = "1.85"
 
-description = "Convert a path to a URI"
+description = "Convert a path to a file:// URI, e.g. a clickable link for the terminal"
 license = "ISC"
 documentation = "https://docs.rs/path_as_uri"
 repository = "https://github.com/Alirex/rs_lib_i_path_as_uri"
 readme = "README.md"
+include = ["/src", "/README.md", "/LICENSE.txt", "/CHANGELOG.md"]
 
-keywords = [
-    "path",
-    "uri",
-]
-
-categories = [
-    "filesystem",
-]
-
+keywords = ["path", "uri", "url", "file-uri"]
+categories = ["filesystem"]
 
 [dependencies]
-anyhow = "1.0.98"
-url = "2.5.4"
+anyhow = "1.0"
+url = "2.5"
+
+[lints.rust]
+unsafe_code = "forbid"
+missing_docs = "warn"
+missing_debug_implementations = "warn"
+
+[lints.rustdoc]
+broken_intra_doc_links = "warn"
+
+[lints.clippy]
+pedantic = { level = "warn", priority = -1 }
+allow_attributes = "warn"
+allow_attributes_without_reason = "warn"
+unwrap_used = "warn"
+expect_used = "warn"
+dbg_macro = "warn"
+print_stdout = "warn"
+print_stderr = "warn"
+todo = "warn"
+unimplemented = "warn"
