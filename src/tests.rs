@@ -1,50 +1,63 @@
 use super::*;
 use std::panic;
 
+// Absolute and relative paths differ per platform: a Unix path has no drive on Windows.
+#[cfg(unix)]
+mod platform {
+    pub const ABSOLUTE: &str = "/path/to/file.txt";
+    pub const ABSOLUTE_URI: &str = "file:///path/to/file.txt";
+    pub const WITH_SPACES: &str = "/path/to/file with spaces.txt";
+    pub const WITH_SPACES_URI: &str = "file:///path/to/file%20with%20spaces.txt";
+}
+
+#[cfg(windows)]
+mod platform {
+    pub const ABSOLUTE: &str = r"C:\path\to\file.txt";
+    pub const ABSOLUTE_URI: &str = "file:///C:/path/to/file.txt";
+    pub const WITH_SPACES: &str = r"C:\path\to\file with spaces.txt";
+    pub const WITH_SPACES_URI: &str = "file:///C:/path/to/file%20with%20spaces.txt";
+}
+
+const RELATIVE: &str = "./invalid/path/to/file.txt";
+
 #[test]
 fn test_get_path_as_uri() {
-    let path_as_string = "/path/to/file.txt";
-    let path = Path::new(&path_as_string);
-    let uri = get_path_as_uri_or_error(path).unwrap();
-    assert_eq!(uri.to_string(), "file:///path/to/file.txt");
+    let uri = get_path_as_uri_or_error(Path::new(platform::ABSOLUTE)).unwrap();
+    assert_eq!(uri.as_str(), platform::ABSOLUTE_URI);
 }
 
 #[test]
 fn test_get_path_as_uri_as_string() {
-    let path_as_string = "/path/to/file.txt";
-    let path = Path::new(&path_as_string);
-    let uri_string = get_path_as_uri_string_or_error(path).unwrap();
-    assert_eq!(uri_string, "file:///path/to/file.txt");
+    let uri_string = get_path_as_uri_string_or_error(Path::new(platform::ABSOLUTE)).unwrap();
+    assert_eq!(uri_string, platform::ABSOLUTE_URI);
 }
 
 #[test]
 fn test_get_path_as_uri_invalid() {
-    let path_as_string = "./invalid/path/to/file.txt";
-    let path = Path::new(&path_as_string);
-    let result = get_path_as_uri_or_error(path);
+    let result = get_path_as_uri_or_error(Path::new(RELATIVE));
     assert!(result.is_err());
 }
 
 #[test]
+fn test_error_message_contains_the_path() {
+    let error = get_path_as_uri_or_error(Path::new(RELATIVE)).unwrap_err();
+    assert!(error.to_string().contains(RELATIVE), "{error}");
+}
+
+#[test]
 fn test_get_path_as_uri_string() {
-    let path_as_string = "/path/to/file.txt";
-    let path = Path::new(&path_as_string);
-    let uri_string = get_path_as_uri_string(path);
-    assert_eq!(uri_string, "file:///path/to/file.txt");
+    let uri_string = get_path_as_uri_string(Path::new(platform::ABSOLUTE));
+    assert_eq!(uri_string, platform::ABSOLUTE_URI);
 }
 
 #[test]
 fn test_get_path_as_uri_string_invalid() {
-    let path_as_string = "./invalid/path/to/file.txt";
-    let path = Path::new(&path_as_string);
-    let result = panic::catch_unwind(|| get_path_as_uri_string(path));
+    let result = panic::catch_unwind(|| get_path_as_uri_string(Path::new(RELATIVE)));
     assert!(result.is_err());
 }
 
 #[test]
 fn test_get_path_as_uri_string_whitespace() {
-    let path_as_string = "/path/to/file with spaces.txt";
-    let path = Path::new(&path_as_string);
-    let uri_string = get_path_as_uri_string(path);
-    assert_eq!(uri_string, "file:///path/to/file%20with%20spaces.txt");
+    let uri_string = get_path_as_uri_string(Path::new(platform::WITH_SPACES));
+    assert_eq!(uri_string, platform::WITH_SPACES_URI);
 }
