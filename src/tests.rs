@@ -21,25 +21,25 @@ mod platform {
 const RELATIVE: &str = "./invalid/path/to/file.txt";
 
 #[test]
-fn test_get_path_as_uri() {
+fn path_as_uri() {
     let uri = get_path_as_uri_or_error(Path::new(platform::ABSOLUTE)).unwrap();
     assert_eq!(uri.as_str(), platform::ABSOLUTE_URI);
 }
 
 #[test]
-fn test_get_path_as_uri_as_string() {
+fn path_as_uri_as_string() {
     let uri_string = get_path_as_uri_string_or_error(Path::new(platform::ABSOLUTE)).unwrap();
     assert_eq!(uri_string, platform::ABSOLUTE_URI);
 }
 
 #[test]
-fn test_get_path_as_uri_invalid() {
+fn path_as_uri_rejects_relative() {
     let result = get_path_as_uri_or_error(Path::new(RELATIVE));
     assert!(matches!(result, Err(PathAsUriError::NotAbsolute { .. })));
 }
 
 #[test]
-fn test_error_message_contains_the_path() {
+fn error_message_contains_the_path() {
     let error = get_path_as_uri_or_error(Path::new(RELATIVE)).unwrap_err();
     assert!(
         matches!(&error, PathAsUriError::NotAbsolute { path } if path == Path::new(RELATIVE)),
@@ -49,19 +49,19 @@ fn test_error_message_contains_the_path() {
 }
 
 #[test]
-fn test_get_path_as_uri_string() {
+fn path_as_uri_string() {
     let uri_string = get_path_as_uri_string(Path::new(platform::ABSOLUTE));
     assert_eq!(uri_string, platform::ABSOLUTE_URI);
 }
 
 #[test]
-fn test_get_path_as_uri_string_invalid() {
+fn path_as_uri_string_panics_on_relative() {
     let result = panic::catch_unwind(|| get_path_as_uri_string(Path::new(RELATIVE)));
-    assert!(result.is_err());
+    result.unwrap_err();
 }
 
 #[test]
-fn test_get_path_as_uri_string_whitespace() {
+fn path_as_uri_string_whitespace() {
     let uri_string = get_path_as_uri_string(Path::new(platform::WITH_SPACES));
     assert_eq!(uri_string, platform::WITH_SPACES_URI);
 }
