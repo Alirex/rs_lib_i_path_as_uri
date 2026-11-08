@@ -4,6 +4,8 @@
 API: `get_path_as_uri_or_error`, `get_path_as_uri_string_or_error`, `get_path_as_uri_string` (`src/lib.rs`, tests in
 `src/tests.rs`). Edition 2024, MSRV in `Cargo.toml`, toolchain pinned in `rust-toolchain.toml`.
 
+- The README is the front door: it starts with how to run the repo and is updated in the same commit as any change to a command, recipe, config key, check or layout; run its Quick start once before landing ([HQ docs-match-code](https://github.com/evocaslab/hq/blob/main/practices/docs-match-code.md#the-readme-is-the-front-door)).
+
 ## Commands
 
 [just](https://just.systems) is the entry point (`just` lists recipes).
