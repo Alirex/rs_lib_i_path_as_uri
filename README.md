@@ -67,6 +67,17 @@ For example, if you have a path with spaces in it, you need to encode it.
 
 So, for me, it is easier to use a library that does it for me.
 
+## Use with AI agents
+
+The repo ships one agent skill, [skills/path-as-uri/SKILL.md](skills/path-as-uri/SKILL.md): which function to call for
+which case, and why a relative path is never converted. It runs no scripts and fetches nothing. Copy the
+`skills/path-as-uri` folder into your agent's skills directory (for Claude Code, `.claude/skills/`) to use it. The rules
+for agents that change this repo are in [AGENTS.md](AGENTS.md); the design is in [ARCHITECTURE.md](ARCHITECTURE.md).
+
+## License
+
+ISC, see [LICENSE.txt](LICENSE.txt). The brand artwork in `brand/` is CC-BY-4.0 ([brand book](docs/brand.md)).
+
 ## 🛠️ Dev
 
 Tools: [just](https://just.systems), [prek](https://github.com/j178/prek), Rust via rustup (the toolchain is pinned in

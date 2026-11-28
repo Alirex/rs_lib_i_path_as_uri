@@ -1,0 +1,62 @@
+# Brand source of truth for path_as_uri. Checked with `brandforge check .` (nothing is built yet).
+# Prose: ../docs/brand.md. The display name lives only here (`name`).
+schema: 1
+languages:
+  - { code: en, label: EN, name: English }
+default_language: en
+name:
+  en: path_as_uri
+tagline:
+  en: "A path you can click."
+mission:
+  en: "Turn an absolute filesystem path into a correct file:// URI, with one call."
+vision:
+  en: "Every path a terminal or a log shows is a link that opens the file."
+roles:
+  paper: { light: "#FFFFFF", dark: "#10161C", meaning: { en: Page background } }
+  ink:
+    {
+      light: "#111A22",
+      dark: "#E7EDF2",
+      meaning: { en: Body text and the mark },
+    }
+  muted: { light: "#4A5763", dark: "#A9B6C2", meaning: { en: Secondary text } }
+  primary:
+    {
+      light: "#1F5FAD",
+      dark: "#7DB3F0",
+      meaning: { en: "The one accent: links and the mark's dot" },
+    }
+  on-primary:
+    { light: "#FFFFFF", dark: "#10161C", meaning: { en: Text on the accent } }
+  focus:
+    { light: "#111A22", dark: "#E7EDF2", meaning: { en: Keyboard focus ring } }
+pairs:
+  - { fg: ink, bg: paper, kind: text, level: aaa, use: Body text }
+  - { fg: muted, bg: paper, kind: text, level: aa, use: Secondary text }
+  - { fg: primary, bg: paper, kind: text, level: aa, use: Links }
+  - {
+      fg: on-primary,
+      bg: primary,
+      kind: text,
+      level: aa,
+      use: Label on the accent,
+    }
+  - { fg: focus, bg: paper, kind: ui, level: aa, use: Focus ring }
+fonts:
+  mono:
+    family: JetBrains Mono
+    fallback: [ui-monospace, SFMono-Regular, Menlo, Consolas, monospace]
+    license: OFL-1.1
+    note: The name and code samples; the project is a developer tool.
+assets:
+  - { id: mark, form: mark, path: masters/mark.svg, label: { en: Mark } }
+  - {
+      id: small-mark,
+      form: small-mark,
+      path: masters/small-mark.svg,
+      label: { en: Small mark (16 to 24 px) },
+    }
+legal:
+  owner: Alirex
+  artwork_license: CC-BY-4.0
