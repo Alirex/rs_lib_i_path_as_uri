@@ -16,7 +16,7 @@ categories = ["filesystem"]
 
 [dependencies]
 thiserror = "2"
-url = "2.5"
+url = "2.5.9"
 
 # Strict lints: https://github.com/evocaslab/hq/blob/main/practices/rust-service.md#lints
 # pedantic, nursery and cargo as groups; restriction lints picked one by one (never the group).
