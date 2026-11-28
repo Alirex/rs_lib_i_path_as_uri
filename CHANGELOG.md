@@ -8,6 +8,11 @@ All notable changes to this project are documented here. The format follows
 
 ### Changed
 
+- Git history rewritten on 2026-11-28 to replace a personal commit e-mail: every commit SHA changed, and the tags
+  `v0.0.1` to `v0.1.1` keep their names but point at the rewritten commits. Published crates on crates.io are
+  unchanged; a `git` dependency pinned by `rev` needs the tag instead. A clone from before that date needs
+  `git fetch --force --tags` and a reset of `main`.
+
 - **Breaking:** public functions now return `PathAsUriError` (a thiserror enum) instead of
   `anyhow::Error`, so callers can match on the failure without depending on `anyhow`. Its one variant,
   `NotAbsolute`, carries the path (`PathBuf`); the enum is `#[non_exhaustive]`.
