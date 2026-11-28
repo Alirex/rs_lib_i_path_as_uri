@@ -12,6 +12,12 @@ All notable changes to this project are documented here. The format follows
   `anyhow::Error`, so callers can match on the failure without depending on `anyhow`. Its one variant,
   `NotAbsolute`, carries the path (`PathBuf`); the enum is `#[non_exhaustive]`.
 
+### Security
+
+- The `url` requirement is now `2.5.9`, the first release without
+  [RUSTSEC-2026-0592](https://rustsec.org/advisories/RUSTSEC-2026-0592) (stack overflow in `Url::origin()` on nested
+  `blob:` URLs).
+
 ## [0.1.1] - 2026-10-25
 
 ### Changed
