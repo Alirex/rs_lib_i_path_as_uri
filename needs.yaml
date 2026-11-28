@@ -62,7 +62,7 @@ needs:
     level: required
     why: runs scripts/needs.py and prek
     check: command
-    fix: curl -LsSf https://astral.sh/uv/install.sh | sh
+    fix: curl -LsSf https://astral.sh/uv/install.sh | sh # bulwark:ignore agent-pipe-to-shell install hint text, never run by a script
   - kind: tool
     name: node
     contexts: [develop, ci]
